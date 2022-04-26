@@ -1,33 +1,35 @@
-#  The MIT License (MIT)
+# The MIT License (MIT)
 # Copyright © 2022 IBM Quantum
-# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of this software and associated documentation
+# files (the “Software”), to deal in the Software without
+# restriction, including without limitation the rights to use,
+# copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following
+# conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+# OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+# WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
 
-import uuid
+import json
 import random
+import uuid
+from argparse import ArgumentParser
 from dataclasses import dataclass
 from enum import IntEnum
-import sys
-import getopt
-import json
 from json import JSONEncoder
 from typing import List
-
-from numpy import isin
-
-
-def usage():
-    print(
-        f"""
-This is a Quantum Program random json generator for the Quauntum Systems hiring test 2022.
-Usage: {sys.argv[0]} [OPTIONS]
-OPTIONS:
--n <number of random arithmetic operations per program> Defaults to 3
--m <number of programs> Defaults to 1
-    """
-    )
-    sys.exit()
 
 
 class ArithmeticOperation(IntEnum):
@@ -95,23 +97,31 @@ def to_json(quantum_programs):
 
 
 def main():
-    argv = sys.argv[1:]
-    options, args = getopt.getopt(argv, "hn:m:")
+    parser = ArgumentParser(
+        description="This is a Quantum Program random json generator for the Quantum Systems "
+        "hiring test 2022"
+    )
+    parser.add_argument(
+        "-m",
+        "--programs",
+        metavar="M",
+        type=int,
+        default=1,
+        dest="programs",
+        help="number of programs",
+    )
+    parser.add_argument(
+        "-n",
+        "--operations",
+        metavar="N",
+        type=int,
+        default=3,
+        dest="operations",
+        help="number of random arithmetic operations per program",
+    )
+    args = parser.parse_args()
 
-    number_of_operations = 3
-    number_of_programs = 1
-
-    for opt, arg in options:
-        if opt in ["-h", "--help"]:
-            usage()
-
-        if opt == "-n":
-            number_of_operations = int(arg)
-
-        if opt == "-m":
-            number_of_programs = int(arg)
-
-    quantum_programs = generate_quantum_programs(number_of_operations, number_of_programs)
+    quantum_programs = generate_quantum_programs(args.operations, args.programs)
     quantum_programs_json = to_json(quantum_programs)
 
     print(quantum_programs_json)
