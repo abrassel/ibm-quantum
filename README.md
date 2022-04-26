@@ -13,7 +13,7 @@ These quantum computers use quantum bits, or qubits, to carry information. We us
 A quantum program contains source code that can be run on a quantum computer. Similar to the early years of classical computing, when people wrote in assembly to manipulate bits and registers, quantum programs today often consist of low level operations.
 
 For the purpose of this exercise, let's assume that a quantum program is just a set of very simple **arithmetic operations** sequentially applied. Let's further assume these operations include only summation, multiplication, and division.
-This is an example of an arithmetic quantum program that could be the (json) input of our software:
+This is an example of one arithmetic quantum program that could be the (json) input of our software:
 ```
 {
   "id": "abcdefghijkl",
@@ -47,7 +47,7 @@ This is an example of an arithmetic quantum program that could be the (json) inp
 ## What is a Control Instrument?
 Similar to how classical programs need to be compiled into machine code before it can be loaded into a CPU, our "high level" quantum programs also need to be compiled into microwave pulse representation. The pulse representation can then be loaded into a control instrument to generate the correct pulses.
 
-The funny thing though, is that every instrument manufacturer has its own pulse representation. So a higher-level operation like Sum will be translated into different pulse sequence representations depending on the instrument used. The following table shows the pulse sequences from two different manufacturers, ACME Instruments and Madrid Instruments:
+The funny thing though, is that every instrument manufacturer has its own pulse representation. So a higher-level operation like Sum will be translated into different pulse sequence representations depending on the instrument used. The following table shows the pulse sequences from two different manufacturers, `ACME Instruments` and `Madrid Instruments`:
 
 ## High-level operation
 
@@ -68,12 +68,13 @@ The funny thing though, is that every instrument manufacturer has its own pulse 
 	
 
 Your task here is to build a system software that will translate a high-level quantum program, which is the input of the software, into a pulse sequence that will be loaded and executed on a specific control instrument.  Also, you need to design your software in a way that is easy to extend in the case that we support dozens of different control instruments.
-The solution you will submit will only integrate with two of these control systems though: ACME Instruments and Madrid Instruments. We provide you with two REST services that simulate the control instrument systems for these two vendors.
+The solution you will submit will only integrate with two of these control systems though: `ACME Instruments` and `Madrid Instruments`. We provide you with two REST services that simulate the control instrument systems for these two vendors.
 
-You can get them here (clone and run):
+You can get them here:
 - https://github.com/atilag/AcmeInstrumentsService
 - https://github.com/atilag/MadridInstrumentsService
 
+Read the README on notes about running them.
 These programs will return a response with the result of the computation.
 
 
@@ -143,13 +144,25 @@ POST /load_program
   ]
 }
 ```
-3. Receive a program ID that identifies the pulse program just loaded: `AcmeProgramId1`
+3. Receive a program ID that identifies the pulse program just loaded: `AcmeProgramId1`:
+```
+{
+  "program_id": "AcmeProgramId1"
+}
+```
+
 4. Trigger the execution of the program using the `ACME Instruments` REST Service endpoint: `/run_program` via GET:
 ```
 GET /run_program/AcmeProgramId1
 ```
-5. Receive the result of the execution of the quantum program: 195.
-6. Return the result to the user.
+5. Receive the result of the execution of the quantum program: `195`:
+```
+{
+  "result": 195
+}
+```
+
+6. Return the result to the user or print it to stdout
 
 ## What are we expecting to see in the code
 - Clean code!
@@ -171,8 +184,27 @@ GET /run_program/AcmeProgramId1
 
 
 ## Restrictions/Notes
-- We can only run one quantum program at a time.
-- You can choose to build a command line tool or a REST service if you prefer, we don't care, whatever works better for you.
-- Use non-GPL open-source libraries/packages/crates if you need to (you don't have to parse JSON by yourself ;))
+- The input can be just one arithmetic quantum program as the example above or several quantum programs in the form of:
+```
+[
+  {"id": "asdfghjkl1...", ...}
+  {"id": "asdfghjkl5...", ...}
+  {"id": "asdfghjkl9...", ...}
+  ...
+]
+```
+- Each of the programs could have an specific **control instrument** vendor: `Acme Instruments` or `Madrid Instruments`. 
+```
+[
+  {"id": "asdfghjkl1...", control_instrument: "ACME", ... }
+  {"id": "asdfghjkl5...", control_instrument: "MADRID", ...}
+  {"id": "asdfghjkl9...", control_instrument: "ACME",...}
+  ...
+]
+```
+
+- As we are targeting two different **control instuments** vendors: `Acme Instruments` and `Madrid Instruments` and both REST services run in different processes, there's a chance to improve execution performance, we would like to see how! :)
+- You can choose to build a command line tool or a REST service if you prefer, we don't care, whatever works better for you. We will provide the input as files but it's ok if you want to create a client-like app to send the input.
+- Use non-GPL open-source libraries/packages/crates if you need/want to (you don't have to parse JSON by yourself nor implement HTTP protocol ;))
 - You are free to choose whatever build system, runtime environment, toolchain works better for you.
 - Drop some documentation on how to compile/run your program! :)
