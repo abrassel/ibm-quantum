@@ -38,10 +38,11 @@ This is an example of an arithmetic quantum program that could be the (json) inp
 ```
 
 ## Some clarifications on the fields
-**control_instrument**: The name of the control instrument this quantum program is targeting.
-**initial_state**: This is the initial value of the quantum computer, right before we start running.
-**operations**: An array of arithmetic operations to apply.
-**type**: Indicates the type of operation: summation ("Sum"), multiplication ("Mul"), or division ("Div"). The "value" field contains the value to use. In the example above, the result will be ((10+120)*3)/2 = 195.
+
+* **control_instrument**: The name of the control instrument this quantum program is targeting.
+* **initial_state**: This is the initial value of the quantum computer, right before we start running.
+* **operations**: An array of arithmetic operations to apply.
+* **type**: Indicates the type of operation: summation ("Sum"), multiplication ("Mul"), or division ("Div"). The "value" field contains the value to use. In the example above, the result will be ((10+120)*3)/2 = 195.
 
 ## What is a Control Instrument?
 Similar to how classical programs need to be compiled into machine code before it can be loaded into a CPU, our "high level" quantum programs also need to be compiled into microwave pulse representation. The pulse representation can then be loaded into a control instrument to generate the correct pulses.
