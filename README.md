@@ -16,22 +16,25 @@ For the purpose of this exercise, let's assume that a quantum program is just a 
 This is an example of an arithmetic quantum program that could be the (json) input of our software:
 ```
 {
-    "id": "abcdefghijkl",
-    "control_instrument": "ACME",
-    "initial_value": 10,
-    "operations": [{
-        "type": "Sum",
-        "value": 120
+  "id": "abcdefghijkl",
+  "control_instrument": "ACME",
+  "initial_value": 10,
+  "operations": [
+    {
+      "type": "Sum",
+      "value": 120
     },
     {
-        "type": "Mul",
-        "value": 3
+      "type": "Mul",
+      "value": 3
     },
     {
-        "type": "Div",
-        "value": 2
-    }]
+      "type": "Div",
+      "value": 2
+    }
+  ]
 }
+
 ```
 
 ## Some clarifications on the fields
@@ -77,21 +80,23 @@ These programs will return a response with the result of the computation.
 Let's assume that your system software gets this quantum program as an input:
 ```
 {
-    "id": "abcdefghijkl",
-    "control_instrument": "ACME",
-    "initial_value": 10,
-    "operations": [{
-        "type": "Sum",
-        "value": 120,
+  "id": "abcdefghijkl",
+  "control_instrument": "ACME",
+  "initial_value": 10,
+  "operations": [
+    {
+      "type": "Sum",
+      "value": 120
     },
     {
-        "type": "Mul",
-        "value": 3,
+      "type": "Mul",
+      "value": 3
     },
     {
-        "type": "Div",
-        "value": 2,
-    }]
+      "type": "Div",
+      "value": 2
+    }
+  ]
 }
 ```
 
@@ -99,20 +104,20 @@ The software then takes the following steps:
 1. Translate the program into pulse representation in JSON format, for an `ACME Instruments` device (which is the target taken from the **control_instument** field):
 ```
 {
-   "program_code":[
-      "Acme_initial_state_pulse",
-      10,
-      "Acme_pulse_1",
-      "Acme_pulse_2",
-      120,
-      "Acme_pulse_2",
-      "Acme_pulse_1",
-      "Acme_pulse_1",
-      3,
-      "Acme_pulse_2",
-      "Acme_pulse_2",
-      2
-   ]
+  "program_code": [
+    "Acme_initial_state_pulse",
+    10,
+    "Acme_pulse_1",
+    "Acme_pulse_2",
+    120,
+    "Acme_pulse_2",
+    "Acme_pulse_1",
+    "Acme_pulse_1",
+    3,
+    "Acme_pulse_2",
+    "Acme_pulse_2",
+    2
+  ]
 }
 ```
 
@@ -120,20 +125,22 @@ The software then takes the following steps:
 2. Send this JSON message to the `ACME Instruments` REST Service through the exposed `/load_program` endpoint via POST:
 ```
 POST /load_program
-{ "program_code":[
-      "Acme_initial_state_pulse",
-      10,
-      "Acme_pulse_1",
-      "Acme_pulse_2",
-      120,
-      "Acme_pulse_2",
-      "Acme_pulse_1",
-      "Acme_pulse_1",
-      3,
-      "Acme_pulse_2",
-      "Acme_pulse_2",
-      2
-   ] }
+{
+  "program_code": [
+    "Acme_initial_state_pulse",
+    10,
+    "Acme_pulse_1",
+    "Acme_pulse_2",
+    120,
+    "Acme_pulse_2",
+    "Acme_pulse_1",
+    "Acme_pulse_1",
+    3,
+    "Acme_pulse_2",
+    "Acme_pulse_2",
+    2
+  ]
+}
 ```
 3. Receive a program ID that identifies the pulse program just loaded: `AcmeProgramId1`
 4. Trigger the execution of the program using the `ACME Instruments` REST Service endpoint: `/run_program` via GET:
