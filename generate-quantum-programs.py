@@ -22,6 +22,11 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
+# This tool is meant to generate a list of valid arithmetic quantum
+# programs of different sizes and forms that could be useful to test
+# the input of the proposed IBM Quantum Systems hiring excercise.
+
+
 import json
 import random
 import uuid

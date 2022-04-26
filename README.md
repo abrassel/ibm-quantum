@@ -204,6 +204,7 @@ GET /run_program/AcmeProgramId1
 ]
 ```
 - As we are targeting two different **control instuments** manufacturers: `Acme Instruments` and `Madrid Instruments` and both REST services run in different processes, there's a chance to improve execution performance, we would like to see how! :)
+- We also provide a handy tool: `generate-quantum-programs.py`. This tool will generate random lists of inputs. We think this could be useful as a testing tool, you can read the details in the header of the source file.
 - You can choose to build a command line tool or a REST service if you prefer, we don't care, whatever works better for you. We will provide the input as files but it's ok if you want to create a client-like app to send the input.
 - Use non-GPL open-source libraries/packages/crates if you need/want to (you don't have to parse JSON by yourself nor implement HTTP protocol ;))
 - You are free to choose whatever build system, runtime environment, toolchain works better for you.
