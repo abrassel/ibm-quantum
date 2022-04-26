@@ -1,4 +1,4 @@
-# IBM Quantum Systems software exercise propsal
+# IBM Quantum Systems software exercise proposal
 
 We are building a new and exciting Quantum Computer!
 To improve user experience, we will allow our users to write high level quantum programs. Your task is to write a piece of system software that will compile, load, and run the user programs.
@@ -103,7 +103,7 @@ Let's assume that your system software gets this quantum program as an input:
 ```
 
 The software then takes the following steps:
-1. Translate the program into pulse representation in JSON format, for an `ACME Instruments` device (which is the target taken from the **control_instument** field):
+1. Translate the program into pulse representation in JSON format, for an `ACME Instruments` device (which is the target taken from the **control_instrument** field):
 ```
 {
   "program_code": [
@@ -185,7 +185,7 @@ GET /run_program/AcmeProgramId1
 
 ## Restrictions/Notes
 - We provide with two files: `quantum_program_input.json` and `large_quantum_program_input.json`. The former is just one arithmetic quantum program, and the latter is a list of 50 arithmetic quantum programs.
-- The case for one arithmetic quantum program as the JSON input is exactly the same as the exmaple above, and the case of a list of arithmetic quantum programs is in the form of:
+- The case for one arithmetic quantum program as the JSON input is exactly the same as the example above, and the case of a list of arithmetic quantum programs is in the form of:
 ```
 [
   {"id": "asdfghjkl1...", ...}
@@ -194,7 +194,7 @@ GET /run_program/AcmeProgramId1
   ...
 ]
 ```
-- Each of the artihemtic quantum program in the list could have one of the two **control instrument** manufacturer: `Acme Instruments` or `Madrid Instruments`. 
+- Each of the arithmetic quantum program in the list could have one of the two **control instrument** manufacturer: `Acme Instruments` or `Madrid Instruments`.
 ```
 [
   {"id": "asdfghjkl1...", control_instrument: "ACME", ... }
@@ -203,7 +203,7 @@ GET /run_program/AcmeProgramId1
   ...
 ]
 ```
-- As we are targeting two different **control instuments** manufacturers: `Acme Instruments` and `Madrid Instruments` and both REST services run in different processes, there's a chance to improve execution performance, we would like to see how! :)
+- As we are targeting two different **control instruments** manufacturers: `Acme Instruments` and `Madrid Instruments` and both REST services run in different processes, there's a chance to improve execution performance, we would like to see how! :)
 - We also provide a handy tool: `generate-quantum-programs.py`. This tool will generate random lists of inputs. We think this could be useful as a testing tool, you can read the details in the header of the source file.
 - You can choose to build a command line tool or a REST service if you prefer, we don't care, whatever works better for you. We will provide the input as files but it's ok if you want to create a client-like app to send the input.
 - Use non-GPL open-source libraries/packages/crates if you need/want to (you don't have to parse JSON by yourself nor implement HTTP protocol ;))
