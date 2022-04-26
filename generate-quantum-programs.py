@@ -82,7 +82,7 @@ def generate_quantum_programs(number_of_operations, number_of_programs):
             )
         quantum_programs.append(
             QuantumProgram(
-                id=str(uuid.uuid4()),
+                id=str(uuid.UUID(int=random.getrandbits(128))),
                 control_instrument=ControlInstrument.Acme,
                 initial_value=random.randint(0, 10),
                 operations=arithmetic_opers,
@@ -108,7 +108,7 @@ def main():
         type=int,
         default=1,
         dest="programs",
-        help="number of programs",
+        help="number of programs (default: %(default)s)",
     )
     parser.add_argument(
         "-n",
@@ -117,9 +117,20 @@ def main():
         type=int,
         default=3,
         dest="operations",
-        help="number of random arithmetic operations per program",
+        help="number of random arithmetic operations per program (default: %(default)s)",
+    )
+    parser.add_argument(
+        "-s",
+        "--seed",
+        metavar="S",
+        type=int,
+        dest="seed",
+        help="random seed used for the generation (default: %(default)s)",
     )
     args = parser.parse_args()
+
+    if args.seed:
+        random.seed(args.seed)
 
     quantum_programs = generate_quantum_programs(args.operations, args.programs)
     quantum_programs_json = to_json(quantum_programs)
