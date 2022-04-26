@@ -68,7 +68,7 @@ The funny thing though, is that every instrument manufacturer has its own pulse 
 	
 
 Your task here is to build a system software that will translate a high-level quantum program, which is the input of the software, into a pulse sequence that will be loaded and executed on a specific control instrument.  Also, you need to design your software in a way that is easy to extend in the case that we support dozens of different control instruments.
-The solution you will submit will only integrate with two of these control systems though: `ACME Instruments` and `Madrid Instruments`. We provide you with two REST services that simulate the control instrument systems for these two vendors.
+The solution you will submit will only integrate with two of these control systems though: `ACME Instruments` and `Madrid Instruments`. We provide you with two REST services that simulate the control instrument systems for these two manufacturers.
 
 You can get them here:
 - https://github.com/atilag/AcmeInstrumentsService
@@ -167,7 +167,7 @@ GET /run_program/AcmeProgramId1
 ## What are we expecting to see in the code
 - Clean code!
   - Think of it as high-quality production-ready code BUT is fine to make these assumptions/exceptions:
-  - The vendor instrument REST service connection is always fine, you don't have to write a rock-solid code around connecting to to the REST service.
+  - The vendor-specific control instrument REST service connection is always fine, you don't have to write a rock-solid code around connecting to to the REST service.
   - We could also assume that the input of the system is always well-formed. No edge cases, or complex user-facing error strategies.
   - Use comments to explain design decisions if you want, but we are sure that your code talks by itself :)
 - Testing!
@@ -178,13 +178,14 @@ GET /run_program/AcmeProgramId1
   - Is fine if you take assumptions and write code that reflects them. But don't go crazy! Drop us a message if you have questions.
   - You are free to write comments with the tradeoffs,  assumptions, notes you want us to know. Let your code talk for yourself!
 - Maintainability over performance!
-  - Maintainable code is preferred over performant code, but it's ok if you want to make some part performant on purpose, just let us know in a comment if you took this decision so we are aware that expressiveness has been scarified a little bit in favor of performance. Let us also know why you think this code is performant! :)
+  - Maintainable code is preferred over performant code in general, but it's ok if you want to make some part performant on purpose, just let us know in a comment if you took this decision so we are aware that expressiveness has been scarified a little bit in favor of performance. Let us also know why do you think this code is performant! :)
 - It works! (mostly)
   - We will run a set of tests with the inputs we provide just to check the software is correct... it's OK if there are some edge-cases not covered, but in general the software needs to work as expected.
 
 
 ## Restrictions/Notes
-- The input can be just one arithmetic quantum program as the example above or several quantum programs in the form of:
+- We provide with two files: `quantum_program_input.json` and `large_quantum_program_input.json`. The former is just one arithmetic quantum program, and the latter is a list of 50 arithmetic quantum programs.
+- The case for one arithmetic quantum program as the JSON input is exactly the same as the exmaple above, and the case of a list of arithmetic quantum programs is in the form of:
 ```
 [
   {"id": "asdfghjkl1...", ...}
@@ -193,7 +194,7 @@ GET /run_program/AcmeProgramId1
   ...
 ]
 ```
-- Each of the programs could have an specific **control instrument** vendor: `Acme Instruments` or `Madrid Instruments`. 
+- Each of the artihemtic quantum program in the list could have one of the two **control instrument** manufacturer: `Acme Instruments` or `Madrid Instruments`. 
 ```
 [
   {"id": "asdfghjkl1...", control_instrument: "ACME", ... }
@@ -202,9 +203,8 @@ GET /run_program/AcmeProgramId1
   ...
 ]
 ```
-
-- As we are targeting two different **control instuments** vendors: `Acme Instruments` and `Madrid Instruments` and both REST services run in different processes, there's a chance to improve execution performance, we would like to see how! :)
+- As we are targeting two different **control instuments** manufacturers: `Acme Instruments` and `Madrid Instruments` and both REST services run in different processes, there's a chance to improve execution performance, we would like to see how! :)
 - You can choose to build a command line tool or a REST service if you prefer, we don't care, whatever works better for you. We will provide the input as files but it's ok if you want to create a client-like app to send the input.
 - Use non-GPL open-source libraries/packages/crates if you need/want to (you don't have to parse JSON by yourself nor implement HTTP protocol ;))
 - You are free to choose whatever build system, runtime environment, toolchain works better for you.
-- Drop some documentation on how to compile/run your program! :)
+- Drop some documentation on how to compile/run your program!
