@@ -1,7 +1,7 @@
 {
    "id": "abcdefghijkl",
    "control_instrument": "ACME",
-   "initial_value": "10",
+   "initial_value": 10,
    "operations": [
       {
          "type": "Sum",
