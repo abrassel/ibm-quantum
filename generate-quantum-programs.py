@@ -51,7 +51,7 @@ class Operation:
 @dataclass
 class QuantumProgram:
     id: str
-    control_instrument: str
+    control_instrument: ControlInstrument
     initial_value: int
     operations: List[Operation]
 
@@ -75,14 +75,14 @@ def generate_quantum_programs(number_of_operations, number_of_programs):
             arithmetic_opers.append(
                 Operation(
                     type=ArithmeticOperation(random.randint(1, 3)),
-                    value=str(random.randint(1, 10)),
+                    value=random.randint(1, 10),
                 )
             )
         quantum_programs.append(
             QuantumProgram(
                 id=str(uuid.uuid4()),
                 control_instrument=ControlInstrument.Acme,
-                initial_value=str(random.randint(0, 10)),
+                initial_value=random.randint(0, 10),
                 operations=arithmetic_opers,
             )
         )
