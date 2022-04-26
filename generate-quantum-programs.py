@@ -83,7 +83,7 @@ def generate_quantum_programs(number_of_operations, number_of_programs):
         quantum_programs.append(
             QuantumProgram(
                 id=str(uuid.UUID(int=random.getrandbits(128))),
-                control_instrument=ControlInstrument.Acme,
+                control_instrument=ControlInstrument(random.randint(1, 2)),
                 initial_value=random.randint(0, 10),
                 operations=arithmetic_opers,
             )
