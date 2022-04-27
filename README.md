@@ -209,3 +209,12 @@ GET /run_program/AcmeProgramId1
 - Use non-GPL open-source libraries/packages/crates if you need/want to (you don't have to parse JSON by yourself nor implement HTTP protocol ;))
 - You are free to choose whatever build system, runtime environment, toolchain works better for you.
 - Drop some documentation on how to compile/run your program!
+
+## How to submit the test
+We are proposing 2 ways:
+1. Create a Github repository and send us your link so we can clone it :)
+2. Send an email with the .tgz/.zip/.7z/etc
+
+Thank you very much for participating and spending your precious time with us!
+
+IBM Quantum Systems team.
