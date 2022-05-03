@@ -210,6 +210,12 @@ GET /run_program/AcmeProgramId1
 - You are free to choose whatever build system, runtime environment, toolchain works better for you.
 - Drop some documentation on how to compile/run your program!
 
+## What programming language can I use to code the solution?
+Use the programming language you are more confortable with from this list:
+Rust, C++, C, Go, Java, Typescript, C#, Python, Javascript, PHP.
+If you want to use other language not included in this list, drop us an email and we can discuss.
+
+
 ## How to submit the test
 We are proposing 2 ways:
 1. Create a Github repository and send us your link so we can clone it :)
