@@ -67,10 +67,12 @@ The funny thing though, is that every instrument manufacturer has its own pulse 
 |                      |        Value                    |       Madrid_initial_state_pulse  |
 	
 
-Your task here is to build a system software that will translate a high-level quantum program, which is the input of the software, into a pulse sequence that will be loaded and executed on a specific control instrument.  Also, you need to design your software in a way that is easy to extend in the case that we support dozens of different control instruments.
-The solution you will submit will only integrate with two of these control systems though: `ACME Instruments` and `Madrid Instruments`. We provide you with two REST services that simulate the control instrument systems for these two manufacturers.
+Your task here is to build a system software that will translate a high-level quantum program, which is the input of the software, into a pulse sequence that will be loaded and executed on a specific control instrument.  
+Very important!, you need to design your software in a way that is easy to extend in the case that we support dozens of different control instruments.
+The solution you will submit will only integrate with two of these control systems though: `ACME Instruments` and `Madrid Instruments`. We provide you with two REST services that simulate the control instrument systems for these two manufacturers but your solution doesn't have to assume that all the control instruments are REST services, they can be accesed by any kind of connection actually, so take this into account when you are designing this abstraction.
 
-You can get them here:
+
+You can get `ACME Instruments` and `Madrid Instruments` from here:
 - https://github.com/atilag/AcmeInstrumentsService
 - https://github.com/atilag/MadridInstrumentsService
 
