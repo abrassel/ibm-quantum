@@ -177,7 +177,7 @@ GET /run_program/AcmeProgramId1
   - If you can think of more interesting tests, just write the functions signature and make it clear what you want to test but do not implement then, just assert to true.
 - Pragmatism!
   - Do not over-engineer
-  - Is fine if you take assumptions and write code that reflects them. But don't go crazy! Drop us a message if you have questions.
+  - Is fine if you make assumptions and write code that reflects them. But don't go crazy! Drop us a message if you have questions.
   - You are free to write comments with the tradeoffs,  assumptions, notes you want us to know. Let your code talk for yourself!
 - Maintainability over performance!
   - Maintainable code is preferred over performant code in general, but it's ok if you want to make some part performant on purpose, just let us know in a comment if you took this decision so we are aware that expressiveness has been scarified a little bit in favor of performance. Let us also know why do you think this code is performant! :)
