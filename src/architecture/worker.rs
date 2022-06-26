@@ -7,6 +7,8 @@ use crossbeam_channel::Sender;
 
 use crate::program::Program;
 
+use super::Architecture;
+
 pub struct Worker {
     me: JoinHandle<anyhow::Result<()>>,
     input: Sender<Program>,
@@ -24,21 +26,23 @@ impl fmt::Display for WorkerResult {
 }
 
 impl Worker {
-    pub fn new(name: &str, output: Sender<WorkerResult>) -> anyhow::Result<Self> {
+    pub fn new<Arch: Architecture + 'static>(
+        arch: Arch,
+        output: Sender<WorkerResult>,
+    ) -> anyhow::Result<Self> {
         let (tx, rx) = crossbeam_channel::unbounded::<Program>();
-        let worker = thread::Builder::new()
-            .name(name.to_owned())
-            .spawn(move || {
-                for program in rx.iter() {
-                    let result = program.interpret()?;
-                    output.send(WorkerResult {
-                        id: program.id,
-                        output: result,
-                    })?;
-                }
+        let worker = thread::spawn(move || {
+            let arch = arch;
+            for program in rx.iter() {
+                let result = program.interpret(&arch)?;
+                output.send(WorkerResult {
+                    id: program.id,
+                    output: result,
+                })?;
+            }
 
-                Ok(())
-            })?;
+            Ok(())
+        });
 
         return Ok(Worker {
             me: worker,

@@ -1,35 +1,16 @@
-use enum_dispatch::enum_dispatch;
 use serde::{Deserialize, Serialize};
 
-use self::{acme::Acme, madrid::Madrid};
 use crate::program::{interpreted::InterpretedProgram, Operation};
 
-mod acme;
-mod madrid;
+pub mod acme;
+pub mod madrid;
 pub mod worker;
 
 #[derive(Deserialize)]
-pub enum ArchitectureKindDeserializer {
+pub enum ArchitectureKind {
     #[serde(alias = "ACME", alias = "acme")]
     Acme,
     Madrid,
-}
-
-#[enum_dispatch]
-#[derive(Deserialize)]
-#[serde(from = "ArchitectureKindDeserializer")]
-pub enum ArchitectureKind {
-    Acme(Acme),
-    Madrid(Madrid),
-}
-
-impl From<ArchitectureKindDeserializer> for ArchitectureKind {
-    fn from(other: ArchitectureKindDeserializer) -> Self {
-        match other {
-            ArchitectureKindDeserializer::Acme => Self::Acme(Acme::new()),
-            ArchitectureKindDeserializer::Madrid => Self::Madrid(Madrid::new()),
-        }
-    }
 }
 
 #[derive(Serialize)]
@@ -39,8 +20,7 @@ pub enum Instruction {
     Value(usize),
 }
 
-#[enum_dispatch(ArchitectureKind)]
-pub trait Architecture {
+pub trait Architecture: Send {
     /// Call this endpoint to execute a full program
     fn run(&self, program: &InterpretedProgram) -> anyhow::Result<usize>;
 

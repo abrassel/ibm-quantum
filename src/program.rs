@@ -24,18 +24,18 @@ pub enum Operation {
 }
 
 impl Program {
-    pub fn interpret(&self) -> anyhow::Result<usize> {
-        let Self {
-            id: _,
-            control_instrument,
-            initial_value,
-            operations,
-        } = self;
+    pub fn interpret<Arch: Architecture>(
+        &self,
+        control_instrument: &Arch,
+    ) -> anyhow::Result<usize> {
         let program_code: Vec<Instruction> = {
-            let rest = operations
+            let rest = self
+                .operations
                 .iter()
                 .flat_map(|operation| control_instrument.apply_operation(operation));
-            let init = control_instrument.initial_state(*initial_value).into_iter();
+            let init = control_instrument
+                .initial_state(self.initial_value)
+                .into_iter();
             init.chain(rest).collect()
         };
 

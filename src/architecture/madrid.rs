@@ -1,4 +1,4 @@
-use reqwest::blocking::Client;
+use reqwest::{blocking::Client, Url};
 
 use crate::program::interpreted::{Id, InterpretedProgram, ProgramResult};
 
@@ -16,7 +16,7 @@ pub struct Madrid {
 }
 
 impl Madrid {
-    pub fn new() -> Self {
+    pub fn new(url: Url) -> Self {
         let client = Client::new();
         Self { client }
     }
