@@ -1,0 +1,9 @@
+[package]
+name = "ibm-quantum"
+version = "0.1.0"
+edition = "2021"
+author = "abrassel"
+about = "Interpret quantum programs for the Acme and Madrid architecture"
+
+[dependencies]
+clap = { version = "3.2", features = ["derive"]}
