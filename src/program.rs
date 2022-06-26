@@ -2,7 +2,10 @@ use serde::Deserialize;
 
 use crate::architecture::{Architecture, ArchitectureKind, Instruction};
 
+use self::interpreted::InterpretedProgram;
+
 pub mod deserialization;
+pub(crate) mod interpreted;
 
 #[derive(Deserialize)]
 pub struct Program {
@@ -28,12 +31,12 @@ pub enum OperationKind {
 impl Program {
     pub fn interpret(&self) -> usize {
         let Self {
-            id,
+            id: _,
             control_instrument,
             initial_value,
             operations,
         } = self;
-        let instructions: Vec<Instruction> = {
+        let program_code: Vec<Instruction> = {
             let rest = operations
                 .iter()
                 .flat_map(|operation| control_instrument.apply_operation(operation));
@@ -41,6 +44,6 @@ impl Program {
             init.chain(rest).collect()
         };
 
-        control_instrument.run(id, &instructions)
+        control_instrument.run(&InterpretedProgram { program_code })
     }
 }

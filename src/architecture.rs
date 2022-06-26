@@ -1,7 +1,7 @@
 use enum_dispatch::enum_dispatch;
 use serde::{Deserialize, Serialize};
 
-use crate::program::{Operation, OperationKind};
+use crate::program::{interpreted::InterpretedProgram, Operation, OperationKind};
 
 use self::{acme::Acme, madrid::Madrid};
 
@@ -42,7 +42,7 @@ pub enum Instruction {
 #[enum_dispatch(ArchitectureKind)]
 pub trait Architecture {
     /// Call this endpoint to execute a full program
-    fn run(&self, id: &str, instructions: &[Instruction]) -> usize;
+    fn run(&self, program: &InterpretedProgram) -> usize;
 
     /// Issue the instruction set for adding two numbers
     fn sum(&self, rhs: usize) -> Vec<Instruction>;

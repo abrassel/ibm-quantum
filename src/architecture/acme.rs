@@ -1,3 +1,5 @@
+use crate::program::interpreted::InterpretedProgram;
+
 use super::{
     Architecture,
     Instruction::{self, *},
@@ -10,7 +12,7 @@ const ACME_INITIAL_STATE_PULSE: &'static str = "Acme_initial_state_pulse";
 pub struct Acme;
 
 impl Architecture for Acme {
-    fn run(&self, id: &str, instructions: &[Instruction]) -> usize {
+    fn run(&self, program: &InterpretedProgram) -> usize {
         todo!()
     }
 
