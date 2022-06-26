@@ -29,7 +29,7 @@ pub enum OperationKind {
 }
 
 impl Program {
-    pub fn interpret(&self) -> usize {
+    pub fn interpret(&self) -> anyhow::Result<usize> {
         let Self {
             id: _,
             control_instrument,

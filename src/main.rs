@@ -19,7 +19,7 @@ fn main() -> anyhow::Result<()> {
     let programs = ProgramInput::read_program_from_file(filename)?;
 
     for program in programs {
-        println!("Result for id {}: {}", program.id, program.interpret());
+        println!("Result for id {}: {}", program.id, program.interpret()?);
     }
 
     Ok(())

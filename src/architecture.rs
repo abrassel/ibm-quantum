@@ -9,8 +9,18 @@ mod acme;
 mod madrid;
 
 #[derive(Deserialize)]
+struct Id {
+    program_id: String,
+}
+
+#[derive(Deserialize)]
+struct ProgramResult {
+    result: usize,
+}
+
+#[derive(Deserialize)]
 pub enum ArchitectureKindDeserializer {
-    #[serde(rename = "ACME")]
+    #[serde(alias = "ACME", alias = "acme")]
     Acme,
     Madrid,
 }
@@ -26,7 +36,7 @@ pub enum ArchitectureKind {
 impl From<ArchitectureKindDeserializer> for ArchitectureKind {
     fn from(other: ArchitectureKindDeserializer) -> Self {
         match other {
-            ArchitectureKindDeserializer::Acme => Self::Acme(Acme),
+            ArchitectureKindDeserializer::Acme => Self::Acme(Acme::new()),
             ArchitectureKindDeserializer::Madrid => Self::Madrid(Madrid),
         }
     }
@@ -42,7 +52,7 @@ pub enum Instruction {
 #[enum_dispatch(ArchitectureKind)]
 pub trait Architecture {
     /// Call this endpoint to execute a full program
-    fn run(&self, program: &InterpretedProgram) -> usize;
+    fn run(&self, program: &InterpretedProgram) -> anyhow::Result<usize>;
 
     /// Issue the instruction set for adding two numbers
     fn sum(&self, rhs: usize) -> Vec<Instruction>;

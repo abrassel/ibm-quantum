@@ -12,7 +12,7 @@ const MADRID_INITIAL_STATE_PULSE: &'static str = "Madrid_initial_state_pulse";
 pub struct Madrid;
 
 impl Architecture for Madrid {
-    fn run(&self, program: &InterpretedProgram) -> usize {
+    fn run(&self, program: &InterpretedProgram) -> anyhow::Result<usize> {
         todo!()
     }
 
