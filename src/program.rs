@@ -16,16 +16,11 @@ pub struct Program {
 }
 
 #[derive(Deserialize)]
-pub struct Operation {
-    pub(crate) r#type: OperationKind,
-    pub(crate) value: usize,
-}
-
-#[derive(Deserialize)]
-pub enum OperationKind {
-    Sum,
-    Mul,
-    Div,
+#[serde(tag = "type")]
+pub enum Operation {
+    Sum { value: usize },
+    Mul { value: usize },
+    Div { value: usize },
 }
 
 impl Program {

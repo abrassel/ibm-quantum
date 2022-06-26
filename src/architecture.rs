@@ -2,7 +2,7 @@ use enum_dispatch::enum_dispatch;
 use serde::{Deserialize, Serialize};
 
 use self::{acme::Acme, madrid::Madrid};
-use crate::program::{interpreted::InterpretedProgram, Operation, OperationKind};
+use crate::program::{interpreted::InterpretedProgram, Operation};
 
 mod acme;
 mod madrid;
@@ -56,11 +56,10 @@ pub trait Architecture {
     /// Helper method to go from operation kind -> concrete operation call.
     /// It's unfortunate that this exists, but it seems to be a shortfall of the dynamicism of the json.
     fn apply_operation(&self, operation: &Operation) -> Vec<Instruction> {
-        let Operation { r#type, value } = operation;
-        match r#type {
-            OperationKind::Sum => self.sum(*value),
-            OperationKind::Mul => self.mul(*value),
-            OperationKind::Div => self.div(*value),
+        match operation {
+            Operation::Sum { value } => self.sum(*value),
+            Operation::Mul { value } => self.mul(*value),
+            Operation::Div { value } => self.div(*value),
         }
     }
 }
