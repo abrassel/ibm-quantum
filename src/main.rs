@@ -1,5 +1,6 @@
 use architecture::worker::Worker;
 use architecture::ArchitectureKind;
+use reqwest::Url;
 use std::{path::PathBuf, thread};
 
 use clap::Parser;
@@ -11,9 +12,17 @@ mod program;
 #[derive(Parser, Debug)]
 #[clap(about)]
 struct Args {
-    /// Program file to interpret
     #[clap(value_parser)]
+    /// Program file to interpret
     program: PathBuf,
+
+    #[clap(long, value_parser)]
+    /// Location of Acme server
+    acme: Url,
+
+    #[clap(long, value_parser)]
+    /// Location of Madrid server
+    madrid: Url,
 }
 
 fn main() -> anyhow::Result<()> {
