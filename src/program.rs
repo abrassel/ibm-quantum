@@ -1,19 +1,12 @@
-use std::{fs::File, io::BufReader, path::Path};
-
 use serde::Deserialize;
 
-use crate::architecture::{Architecture, ArchitectureKind};
+use crate::architecture::{Architecture, ArchitectureKind, Instruction};
 
-#[derive(Deserialize)]
-#[serde(untagged)]
-pub(crate) enum ProgramInput {
-    Multi(Vec<Program>),
-    Single(Program),
-}
+pub mod deserialization;
 
 #[derive(Deserialize)]
 pub struct Program {
-    id: String,
+    pub id: String,
     control_instrument: ArchitectureKind,
     initial_value: usize,
     operations: Vec<Operation>,
@@ -21,8 +14,8 @@ pub struct Program {
 
 #[derive(Deserialize)]
 pub struct Operation {
-    r#type: OperationKind,
-    value: usize,
+    pub(crate) r#type: OperationKind,
+    pub(crate) value: usize,
 }
 
 #[derive(Deserialize)]
@@ -32,29 +25,22 @@ pub enum OperationKind {
     Div,
 }
 
-impl ProgramInput {
-    pub fn read_program_from_file<P: AsRef<Path>>(path: P) -> anyhow::Result<Vec<Program>> {
-        let reader = {
-            let file = File::open(path)?;
-            BufReader::new(file)
+impl Program {
+    pub fn interpret(&self) -> usize {
+        let Self {
+            id,
+            control_instrument,
+            initial_value,
+            operations,
+        } = self;
+        let instructions: Vec<Instruction> = {
+            let rest = operations
+                .iter()
+                .flat_map(|operation| control_instrument.apply_operation(operation));
+            let init = control_instrument.initial_state(*initial_value).into_iter();
+            init.chain(rest).collect()
         };
 
-        let input: Self = serde_json::from_reader(reader)?;
-        Ok(input.into())
-    }
-}
-
-impl Into<Vec<Program>> for ProgramInput {
-    fn into(self) -> Vec<Program> {
-        match self {
-            ProgramInput::Multi(programs) => programs,
-            ProgramInput::Single(program) => vec![program],
-        }
-    }
-}
-
-impl Program {
-    pub fn intepret(&self) -> usize {
-        todo!()
+        control_instrument.run(id, &instructions)
     }
 }

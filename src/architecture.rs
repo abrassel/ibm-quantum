@@ -1,13 +1,35 @@
+use enum_dispatch::enum_dispatch;
 use serde::{Deserialize, Serialize};
+
+use crate::program::{Operation, OperationKind};
+
+use self::{acme::Acme, madrid::Madrid};
 
 mod acme;
 mod madrid;
 
 #[derive(Deserialize)]
-pub enum ArchitectureKind {
+pub enum ArchitectureKindDeserializer {
     #[serde(rename = "ACME")]
     Acme,
     Madrid,
+}
+
+#[enum_dispatch]
+#[derive(Deserialize)]
+#[serde(from = "ArchitectureKindDeserializer")]
+pub enum ArchitectureKind {
+    Acme(Acme),
+    Madrid(Madrid),
+}
+
+impl From<ArchitectureKindDeserializer> for ArchitectureKind {
+    fn from(other: ArchitectureKindDeserializer) -> Self {
+        match other {
+            ArchitectureKindDeserializer::Acme => Self::Acme(Acme),
+            ArchitectureKindDeserializer::Madrid => Self::Madrid(Madrid),
+        }
+    }
 }
 
 #[derive(Serialize)]
@@ -17,16 +39,26 @@ pub enum Instruction {
     Value(usize),
 }
 
+#[enum_dispatch(ArchitectureKind)]
 pub trait Architecture {
     /// Call this endpoint to execute a full program
-    fn run(payload: &str) -> usize;
+    fn run(&self, id: &str, instructions: &[Instruction]) -> usize;
 
     /// Issue the instruction set for adding two numbers
-    fn sum(rhs: usize) -> Vec<Instruction>;
+    fn sum(&self, rhs: usize) -> Vec<Instruction>;
     /// Issue the instruction set for multiplying two numbers
-    fn mul(rhs: usize) -> Vec<Instruction>;
+    fn mul(&self, rhs: usize) -> Vec<Instruction>;
     /// Issue the instruction set for dividing two numbers
-    fn div(rhs: usize) -> Vec<Instruction>;
+    fn div(&self, rhs: usize) -> Vec<Instruction>;
     /// Set the initial state
-    fn initial_state(state: usize) -> Vec<Instruction>;
+    fn initial_state(&self, state: usize) -> Vec<Instruction>;
+
+    fn apply_operation(&self, operation: &Operation) -> Vec<Instruction> {
+        let Operation { r#type, value } = operation;
+        match r#type {
+            OperationKind::Sum => self.sum(*value),
+            OperationKind::Mul => self.mul(*value),
+            OperationKind::Div => self.div(*value),
+        }
+    }
 }

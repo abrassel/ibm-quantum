@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use clap::Parser;
-use program::ProgramInput;
+use program::deserialization::ProgramInput;
 
 mod architecture;
 mod program;
@@ -17,6 +17,10 @@ struct Args {
 fn main() -> anyhow::Result<()> {
     let filename = Args::parse().program;
     let programs = ProgramInput::read_program_from_file(filename)?;
+
+    for program in programs {
+        println!("Result for id {}: {}", program.id, program.interpret());
+    }
 
     Ok(())
 }

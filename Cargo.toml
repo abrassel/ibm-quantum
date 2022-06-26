@@ -8,5 +8,6 @@ descriptions = "Interpret quantum programs for the Acme and Madrid architecture"
 [dependencies]
 anyhow = "1.0"
 clap = { version = "3.2", features = ["derive"]}
+enum_dispatch = "0.3"
 serde = { version = "1.0", features = ["derive"]}
 serde_json = "1.0"

@@ -10,15 +10,15 @@ const MADRID_INITIAL_STATE_PULSE: &'static str = "Madrid_initial_state_pulse";
 pub struct Madrid;
 
 impl Architecture for Madrid {
-    fn run(payload: &str) -> usize {
+    fn run(&self, id: &str, instructions: &[Instruction]) -> usize {
         todo!()
     }
 
-    fn sum(rhs: usize) -> Vec<Instruction> {
+    fn sum(&self, rhs: usize) -> Vec<Instruction> {
         vec![Value(rhs), NamedInstruction(MADRID_PULSE_1)]
     }
 
-    fn mul(rhs: usize) -> Vec<Instruction> {
+    fn mul(&self, rhs: usize) -> Vec<Instruction> {
         vec![
             Value(rhs),
             NamedInstruction(MADRID_PULSE_2),
@@ -26,7 +26,7 @@ impl Architecture for Madrid {
         ]
     }
 
-    fn div(rhs: usize) -> Vec<Instruction> {
+    fn div(&self, rhs: usize) -> Vec<Instruction> {
         vec![
             Value(rhs),
             NamedInstruction(MADRID_PULSE_2),
@@ -34,7 +34,7 @@ impl Architecture for Madrid {
         ]
     }
 
-    fn initial_state(state: usize) -> Vec<Instruction> {
+    fn initial_state(&self, state: usize) -> Vec<Instruction> {
         vec![Value(state), NamedInstruction(MADRID_INITIAL_STATE_PULSE)]
     }
 }
