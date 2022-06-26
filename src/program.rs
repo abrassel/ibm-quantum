@@ -10,7 +10,7 @@ pub(crate) mod interpreted;
 #[derive(Deserialize)]
 pub struct Program {
     pub id: String,
-    control_instrument: ArchitectureKind,
+    pub control_instrument: ArchitectureKind,
     initial_value: usize,
     operations: Vec<Operation>,
 }

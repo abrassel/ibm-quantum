@@ -3,11 +3,12 @@ name = "ibm-quantum"
 version = "0.1.0"
 edition = "2021"
 authors = ["abrassel"]
-descriptions = "Interpret quantum programs for the Acme and Madrid architecture"
+description = "Interpret quantum programs for the Acme and Madrid architecture"
 
 [dependencies]
 anyhow = "1.0"
 clap = { version = "3.2", features = ["derive"]}
+crossbeam-channel = "0.5"
 enum_dispatch = "0.3"
 reqwest = { version = "0.11", features = ["json", "blocking"]}
 serde = { version = "1.0", features = ["derive"]}
