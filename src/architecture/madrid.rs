@@ -1,11 +1,10 @@
 use reqwest::blocking::Client;
 
-use crate::program::interpreted::InterpretedProgram;
+use crate::program::interpreted::{Id, InterpretedProgram, ProgramResult};
 
 use super::{
-    Architecture, Id,
+    Architecture,
     Instruction::{self, *},
-    ProgramResult,
 };
 
 const MADRID_PULSE_1: &'static str = "Madrid_pulse_1";

@@ -1,22 +1,12 @@
 use enum_dispatch::enum_dispatch;
 use serde::{Deserialize, Serialize};
 
-use crate::program::{interpreted::InterpretedProgram, Operation, OperationKind};
-
 use self::{acme::Acme, madrid::Madrid};
+use crate::program::{interpreted::InterpretedProgram, Operation, OperationKind};
 
 mod acme;
 mod madrid;
-
-#[derive(Deserialize)]
-struct Id {
-    program_id: String,
-}
-
-#[derive(Deserialize)]
-struct ProgramResult {
-    result: usize,
-}
+pub mod worker;
 
 #[derive(Deserialize)]
 pub enum ArchitectureKindDeserializer {
@@ -63,6 +53,8 @@ pub trait Architecture {
     /// Set the initial state
     fn initial_state(&self, state: usize) -> Vec<Instruction>;
 
+    /// Helper method to go from operation kind -> concrete operation call.
+    /// It's unfortunate that this exists, but it seems to be a shortfall of the dynamicism of the json.
     fn apply_operation(&self, operation: &Operation) -> Vec<Instruction> {
         let Operation { r#type, value } = operation;
         match r#type {
