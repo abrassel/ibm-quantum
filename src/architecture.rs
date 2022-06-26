@@ -22,9 +22,11 @@ pub trait Architecture {
     fn run(payload: &str) -> usize;
 
     /// Issue the instruction set for adding two numbers
-    fn sum(lhs: usize, rhs: usize) -> Vec<Instruction>;
+    fn sum(rhs: usize) -> Vec<Instruction>;
     /// Issue the instruction set for multiplying two numbers
-    fn mul(lhs: usize, rhs: usize) -> Vec<Instruction>;
+    fn mul(rhs: usize) -> Vec<Instruction>;
     /// Issue the instruction set for dividing two numbers
-    fn div(lhs: usize, rhs: usize) -> Vec<Instruction>;
+    fn div(rhs: usize) -> Vec<Instruction>;
+    /// Set the initial state
+    fn initial_state(state: usize) -> Vec<Instruction>;
 }
