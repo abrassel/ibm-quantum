@@ -3,11 +3,11 @@ use super::{
     Instruction::{self, *},
 };
 
-pub struct Acme;
-
 const ACME_PULSE_1: &'static str = "Acme_pulse_1";
 const ACME_PULSE_2: &'static str = "Acme_pulse_2";
 const ACME_INITIAL_STATE_PULSE: &'static str = "Acme_initial_state_pulse";
+
+pub struct Acme;
 
 impl Architecture for Acme {
     fn run(payload: &str) -> usize {
