@@ -3,6 +3,7 @@ use std::path::PathBuf;
 use clap::Parser;
 use program::ProgramInput;
 
+mod architecture;
 mod program;
 
 #[derive(Parser, Debug)]
