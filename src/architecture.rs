@@ -1,45 +1,16 @@
-use enum_dispatch::enum_dispatch;
 use serde::{Deserialize, Serialize};
 
-use crate::program::{interpreted::InterpretedProgram, Operation, OperationKind};
+use crate::program::{interpreted::InterpretedProgram, Operation};
 
-use self::{acme::Acme, madrid::Madrid};
-
-mod acme;
-mod madrid;
-
-#[derive(Deserialize)]
-struct Id {
-    program_id: String,
-}
+pub mod acme;
+pub mod madrid;
+pub mod worker;
 
 #[derive(Deserialize)]
-struct ProgramResult {
-    result: usize,
-}
-
-#[derive(Deserialize)]
-pub enum ArchitectureKindDeserializer {
+pub enum ArchitectureKind {
     #[serde(alias = "ACME", alias = "acme")]
     Acme,
     Madrid,
-}
-
-#[enum_dispatch]
-#[derive(Deserialize)]
-#[serde(from = "ArchitectureKindDeserializer")]
-pub enum ArchitectureKind {
-    Acme(Acme),
-    Madrid(Madrid),
-}
-
-impl From<ArchitectureKindDeserializer> for ArchitectureKind {
-    fn from(other: ArchitectureKindDeserializer) -> Self {
-        match other {
-            ArchitectureKindDeserializer::Acme => Self::Acme(Acme::new()),
-            ArchitectureKindDeserializer::Madrid => Self::Madrid(Madrid::new()),
-        }
-    }
 }
 
 #[derive(Serialize)]
@@ -49,8 +20,7 @@ pub enum Instruction {
     Value(usize),
 }
 
-#[enum_dispatch(ArchitectureKind)]
-pub trait Architecture {
+pub trait Architecture: Send {
     /// Call this endpoint to execute a full program
     fn run(&self, program: &InterpretedProgram) -> anyhow::Result<usize>;
 
@@ -63,12 +33,13 @@ pub trait Architecture {
     /// Set the initial state
     fn initial_state(&self, state: usize) -> Vec<Instruction>;
 
+    /// Helper method to go from operation kind -> concrete operation call.
+    /// It's unfortunate that this exists, but it seems to be a shortfall of the dynamicism of the json.
     fn apply_operation(&self, operation: &Operation) -> Vec<Instruction> {
-        let Operation { r#type, value } = operation;
-        match r#type {
-            OperationKind::Sum => self.sum(*value),
-            OperationKind::Mul => self.mul(*value),
-            OperationKind::Div => self.div(*value),
+        match operation {
+            Operation::Sum { value } => self.sum(*value),
+            Operation::Mul { value } => self.mul(*value),
+            Operation::Div { value } => self.div(*value),
         }
     }
 }

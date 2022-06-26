@@ -1,11 +1,10 @@
-use reqwest::blocking::Client;
+use reqwest::{blocking::Client, Url};
 
-use crate::program::interpreted::InterpretedProgram;
+use crate::program::interpreted::{Id, InterpretedProgram, ProgramResult};
 
 use super::{
-    Architecture, Id,
+    Architecture,
     Instruction::{self, *},
-    ProgramResult,
 };
 
 const ACME_PULSE_1: &'static str = "Acme_pulse_1";
@@ -14,18 +13,21 @@ const ACME_INITIAL_STATE_PULSE: &'static str = "Acme_initial_state_pulse";
 
 pub struct Acme {
     client: Client,
+    url: Url,
 }
 
 impl Acme {
-    pub fn new() -> Self {
+    pub fn new(url: Url) -> Self {
         let client = Client::new();
-        Self { client }
+
+        Self { client, url }
     }
 
     fn load_program(&self, program: &InterpretedProgram) -> anyhow::Result<Id> {
         let res = self
             .client
-            .post("http://127.0.0.1:8000/load_program")
+            // note there is room for improvement here, duplicating string.  this happens elsewhere.
+            .post(format!("{}load_program", self.url))
             .json(program)
             .send()?;
 
@@ -35,10 +37,7 @@ impl Acme {
     fn run_program(&self, prog_id: Id) -> anyhow::Result<ProgramResult> {
         let res = self
             .client
-            .get(format!(
-                "http://127.0.0.1:8000/run_program/{}",
-                prog_id.program_id
-            ))
+            .get(format!("{}run_program/{}", self.url, prog_id.program_id))
             .send()?;
         Ok(res.json()?)
     }

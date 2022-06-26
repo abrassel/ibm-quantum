@@ -1,11 +1,10 @@
-use reqwest::blocking::Client;
+use reqwest::{blocking::Client, Url};
 
-use crate::program::interpreted::InterpretedProgram;
+use crate::program::interpreted::{Id, InterpretedProgram, ProgramResult};
 
 use super::{
-    Architecture, Id,
+    Architecture,
     Instruction::{self, *},
-    ProgramResult,
 };
 
 const MADRID_PULSE_1: &'static str = "Madrid_pulse_1";
@@ -14,18 +13,19 @@ const MADRID_INITIAL_STATE_PULSE: &'static str = "Madrid_initial_state_pulse";
 
 pub struct Madrid {
     client: Client,
+    url: Url,
 }
 
 impl Madrid {
-    pub fn new() -> Self {
+    pub fn new(url: Url) -> Self {
         let client = Client::new();
-        Self { client }
+        Self { client, url }
     }
 
     fn load_program(&self, program: &InterpretedProgram) -> anyhow::Result<Id> {
         let res = self
             .client
-            .post("http://127.0.0.1:8001/program/load")
+            .post(format!("{}program/load", self.url))
             .json(program)
             .send()?;
 
@@ -35,10 +35,7 @@ impl Madrid {
     fn run_program(&self, prog_id: Id) -> anyhow::Result<ProgramResult> {
         let res = self
             .client
-            .get(format!(
-                "http://127.0.0.1:8001/program/run/{}",
-                prog_id.program_id
-            ))
+            .get(format!("{}program/run/{}", self.url, prog_id.program_id))
             .send()?;
         Ok(res.json()?)
     }
