@@ -57,11 +57,4 @@ impl Program {
     pub fn intepret(&self) -> usize {
         todo!()
     }
-
-    fn interpret_instrs<Arch: Architecture>(
-        initial_value: usize,
-        operations: Vec<Operation>,
-    ) -> Vec<Arch::Instruction> {
-        todo!()
-    }
 }
