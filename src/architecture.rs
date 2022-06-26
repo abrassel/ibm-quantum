@@ -37,7 +37,7 @@ impl From<ArchitectureKindDeserializer> for ArchitectureKind {
     fn from(other: ArchitectureKindDeserializer) -> Self {
         match other {
             ArchitectureKindDeserializer::Acme => Self::Acme(Acme::new()),
-            ArchitectureKindDeserializer::Madrid => Self::Madrid(Madrid),
+            ArchitectureKindDeserializer::Madrid => Self::Madrid(Madrid::new()),
         }
     }
 }

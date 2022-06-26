@@ -1,19 +1,53 @@
+use reqwest::blocking::Client;
+
 use crate::program::interpreted::InterpretedProgram;
 
 use super::{
-    Architecture,
+    Architecture, Id,
     Instruction::{self, *},
+    ProgramResult,
 };
 
 const MADRID_PULSE_1: &'static str = "Madrid_pulse_1";
 const MADRID_PULSE_2: &'static str = "Madrid_pulse_2";
 const MADRID_INITIAL_STATE_PULSE: &'static str = "Madrid_initial_state_pulse";
 
-pub struct Madrid;
+pub struct Madrid {
+    client: Client,
+}
+
+impl Madrid {
+    pub fn new() -> Self {
+        let client = Client::new();
+        Self { client }
+    }
+
+    fn load_program(&self, program: &InterpretedProgram) -> anyhow::Result<Id> {
+        let res = self
+            .client
+            .post("http://127.0.0.1:8001/program/load")
+            .json(program)
+            .send()?;
+
+        Ok(res.json()?)
+    }
+
+    fn run_program(&self, prog_id: Id) -> anyhow::Result<ProgramResult> {
+        let res = self
+            .client
+            .get(format!(
+                "http://127.0.0.1:8001/program/run/{}",
+                prog_id.program_id
+            ))
+            .send()?;
+        Ok(res.json()?)
+    }
+}
 
 impl Architecture for Madrid {
     fn run(&self, program: &InterpretedProgram) -> anyhow::Result<usize> {
-        todo!()
+        let id = self.load_program(program)?;
+        Ok(self.run_program(id)?.result)
     }
 
     fn sum(&self, rhs: usize) -> Vec<Instruction> {
