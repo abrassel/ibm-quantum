@@ -2,6 +2,8 @@ use std::{fs::File, io::BufReader, path::Path};
 
 use serde::Deserialize;
 
+use crate::architecture::{Architecture, ArchitectureKind};
+
 #[derive(Deserialize)]
 #[serde(untagged)]
 pub(crate) enum ProgramInput {
@@ -15,13 +17,6 @@ pub struct Program {
     control_instrument: ArchitectureKind,
     initial_value: usize,
     operations: Vec<Operation>,
-}
-
-#[derive(Deserialize)]
-pub enum ArchitectureKind {
-    #[serde(rename = "ACME")]
-    Acme,
-    Madrid,
 }
 
 #[derive(Deserialize)]
@@ -55,5 +50,18 @@ impl Into<Vec<Program>> for ProgramInput {
             ProgramInput::Multi(programs) => programs,
             ProgramInput::Single(program) => vec![program],
         }
+    }
+}
+
+impl Program {
+    pub fn intepret(&self) -> usize {
+        todo!()
+    }
+
+    fn interpret_instrs<Arch: Architecture>(
+        initial_value: usize,
+        operations: Vec<Operation>,
+    ) -> Vec<Arch::Instruction> {
+        todo!()
     }
 }
