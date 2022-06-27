@@ -21,7 +21,7 @@ pub struct WorkerResult {
 
 impl fmt::Display for WorkerResult {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Result for id {}: {}", self.id, self.output)
+        write!(f, "id {}: {}", self.id, self.output)
     }
 }
 

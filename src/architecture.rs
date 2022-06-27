@@ -13,7 +13,7 @@ pub enum ArchitectureKind {
     Madrid,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug, Eq, PartialEq)]
 #[serde(untagged)]
 pub enum Instruction {
     NamedInstruction(&'static str),

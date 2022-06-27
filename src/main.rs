@@ -34,8 +34,8 @@ fn main() -> anyhow::Result<()> {
     } = Args::parse();
     let programs = ProgramInput::read_program_from_file(filename)?;
     let (tx, rx) = crossbeam_channel::unbounded();
-    let acme = Worker::new(Acme::new(acme), tx.clone())?;
-    let madrid = Worker::new(Madrid::new(madrid), tx)?;
+    let acme = Worker::new(Acme::new(acme)?, tx.clone())?;
+    let madrid = Worker::new(Madrid::new(madrid)?, tx)?;
     let printing_thread = thread::spawn(move || {
         for result in rx.iter() {
             println!("{}", result);
@@ -55,5 +55,3 @@ fn main() -> anyhow::Result<()> {
 
     Ok(())
 }
-#[cfg(test)]
-mod tests {}
