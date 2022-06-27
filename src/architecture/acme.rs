@@ -7,9 +7,9 @@ use super::{
     Instruction::{self, *},
 };
 
-const ACME_PULSE_1: &'static str = "Acme_pulse_1";
-const ACME_PULSE_2: &'static str = "Acme_pulse_2";
-const ACME_INITIAL_STATE_PULSE: &'static str = "Acme_initial_state_pulse";
+const ACME_PULSE_1: &str = "Acme_pulse_1";
+const ACME_PULSE_2: &str = "Acme_pulse_2";
+const ACME_INITIAL_STATE_PULSE: &str = "Acme_initial_state_pulse";
 
 /// Represents the Acme architecture.
 pub struct Acme {

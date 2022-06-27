@@ -7,9 +7,9 @@ use super::{
     Instruction::{self, *},
 };
 
-const MADRID_PULSE_1: &'static str = "Madrid_pulse_1";
-const MADRID_PULSE_2: &'static str = "Madrid_pulse_2";
-const MADRID_INITIAL_STATE_PULSE: &'static str = "Madrid_initial_state_pulse";
+const MADRID_PULSE_1: &str = "Madrid_pulse_1";
+const MADRID_PULSE_2: &str = "Madrid_pulse_2";
+const MADRID_INITIAL_STATE_PULSE: &str = "Madrid_initial_state_pulse";
 
 /// Represents the Madrid architecture.
 pub struct Madrid {

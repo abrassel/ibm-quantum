@@ -46,10 +46,10 @@ impl Worker {
             Ok(())
         });
 
-        return Ok(Worker {
+        Ok(Worker {
             me: worker,
             input: tx,
-        });
+        })
     }
 
     /// Stand-in for a fallible drop.

@@ -26,6 +26,7 @@ impl ProgramInput {
     }
 }
 
+#[allow(clippy::from_over_into)]
 impl Into<Vec<Program>> for ProgramInput {
     /// We want to have a list of programs ultimately, so singletons need to get packaged up.
     fn into(self) -> Vec<Program> {
