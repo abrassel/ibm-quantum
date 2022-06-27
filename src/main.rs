@@ -2,7 +2,7 @@ use architecture::madrid::Madrid;
 use architecture::ArchitectureKind;
 use architecture::{acme::Acme, worker::Worker};
 use reqwest::Url;
-use std::{path::PathBuf, thread};
+use std::{io::Write, path::PathBuf, thread};
 
 use clap::Parser;
 use program::deserialization::ProgramInput;
@@ -33,13 +33,19 @@ fn main() -> anyhow::Result<()> {
         madrid,
     } = Args::parse();
     let programs = ProgramInput::read_program_from_file(filename)?;
+
+    // Set up acme, madrid, and printing thread
     let (tx, rx) = crossbeam_channel::unbounded();
-    let acme = Worker::new(Acme::new(acme), tx.clone())?;
-    let madrid = Worker::new(Madrid::new(madrid), tx)?;
-    let printing_thread = thread::spawn(move || {
+    let acme = Worker::new(Acme::new(acme)?, tx.clone())?;
+    let madrid = Worker::new(Madrid::new(madrid)?, tx)?;
+    let printing_thread = thread::spawn(move || -> anyhow::Result<()> {
+        // acquiring lock increases printing efficiency
+        let mut stdout = std::io::stdout().lock();
         for result in rx.iter() {
-            println!("{}", result);
+            writeln!(stdout, "{}", result)?;
         }
+
+        Ok(())
     });
 
     for program in programs {
@@ -51,9 +57,7 @@ fn main() -> anyhow::Result<()> {
 
     acme.finish()?;
     madrid.finish()?;
-    printing_thread.join().unwrap();
+    printing_thread.join().unwrap()?;
 
     Ok(())
 }
-#[cfg(test)]
-mod tests {}
