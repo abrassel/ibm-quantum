@@ -6,12 +6,15 @@ use super::Program;
 
 #[derive(Deserialize)]
 #[serde(untagged)]
+/// Json input can be either a single program or a list.
+/// Use an untagged enum to get either case.
 pub(crate) enum ProgramInput {
     Multi(Vec<Program>),
     Single(Program),
 }
 
 impl ProgramInput {
+    /// Given a file containing a json program(s), decode it.
     pub fn read_program_from_file<P: AsRef<Path>>(path: P) -> anyhow::Result<Vec<Program>> {
         let reader = {
             let file = File::open(path)?;
@@ -24,6 +27,7 @@ impl ProgramInput {
 }
 
 impl Into<Vec<Program>> for ProgramInput {
+    /// We want to have a list of programs ultimately, so singletons need to get packaged up.
     fn into(self) -> Vec<Program> {
         match self {
             ProgramInput::Multi(programs) => programs,

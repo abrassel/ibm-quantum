@@ -11,12 +11,14 @@ const ACME_PULSE_1: &'static str = "Acme_pulse_1";
 const ACME_PULSE_2: &'static str = "Acme_pulse_2";
 const ACME_INITIAL_STATE_PULSE: &'static str = "Acme_initial_state_pulse";
 
+/// Represents the Acme architecture.
 pub struct Acme {
     client: Client,
     url: Url,
 }
 
 impl Acme {
+    /// Create new `Acme` architecture with target server.
     pub fn new<U: IntoUrl>(url: U) -> anyhow::Result<Self> {
         let client = Client::new();
 
@@ -26,6 +28,7 @@ impl Acme {
         })
     }
 
+    /// Loading the program into the server is the first step to execute.
     fn load_program(&self, program: &InterpretedProgram) -> anyhow::Result<Id> {
         let res = self
             .client
@@ -37,6 +40,7 @@ impl Acme {
         Ok(res.json()?)
     }
 
+    /// After loading the program, it can be run with the Id handle returned.
     fn run_program(&self, prog_id: Id) -> anyhow::Result<ProgramResult> {
         let res = self
             .client

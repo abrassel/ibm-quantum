@@ -8,8 +8,11 @@ pub mod deserialization;
 pub(crate) mod interpreted;
 
 #[derive(Deserialize)]
+/// Represents a single program to execute.
 pub struct Program {
+    /// Each program has a unique identifer consisting of alphanumeric and "-"
     pub id: String,
+    /// Each program is destined to be executed on a specific architecture.
     pub control_instrument: ArchitectureKind,
     initial_value: usize,
     operations: Vec<Operation>,
@@ -17,6 +20,7 @@ pub struct Program {
 
 #[derive(Deserialize)]
 #[serde(tag = "type")]
+/// The current set of supported operations.
 pub enum Operation {
     Sum { value: usize },
     Mul { value: usize },
@@ -24,6 +28,7 @@ pub enum Operation {
 }
 
 impl Program {
+    /// Run a program on a given [`Architecture`].
     pub fn interpret<Arch: Architecture>(
         &self,
         control_instrument: &Arch,
@@ -33,14 +38,17 @@ impl Program {
         control_instrument.run(&InterpretedProgram { program_code })
     }
 
+    /// Translate the operations into [`Architecture`] specific [`Instruction`]s.
     fn translate_operations<Arch: Architecture>(
         &self,
         control_instrument: &Arch,
     ) -> Vec<Instruction> {
+        // Concat all instructions after interpretation
         let rest = self
             .operations
             .iter()
             .flat_map(|operation| control_instrument.apply_operation(operation));
+        // prepend with initial state.
         let init = control_instrument
             .initial_state(self.initial_value)
             .into_iter();
